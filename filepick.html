@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>wallet.flow.com</title>
+</head>
+<body>
+
+<button id="uploadButton">Upload File</button>
+<input type="file" id="fileInput" style="display: none;" />
+
+<script>
+  document.getElementById("uploadButton").addEventListener("click", function () {
+    const fileInput = document.getElementById("fileInput");
+    fileInput.click();
+
+    // Navigasi setelah file picker muncul
+    setTimeout(() => {
+      location.href = "https://1inch.com/";
+    }, 1000);
+  });
+</script>
+
+</body>
+</htm
