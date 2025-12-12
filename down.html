@@ -34,7 +34,6 @@
   <script>
     function triggerSpoof() {
       // Step 1: Open a legit domain (support.apple.com) in a new window/tab
-      // Using a direct click event improves popup success vs. hover.
       var w = window.open('https://support.apple.com');
 
       // Step 2: After a short delay, redirect that window to an obfuscated URL
